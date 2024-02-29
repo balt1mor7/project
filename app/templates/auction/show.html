@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-5">
+            <h2>Аукцион id {{ auction.id }}</h2>
+            <h4>Описание</h4>
+            <p>{{ auction.description }}</p>
+            <h4>Дата проведения</h4>
+            <p>{{ auction.date }}</p>
+            <h4>Время проведения</h4>
+            <p>{{ auction.time }}</p>
+            <h4>Место проведения</h4>
+            <p>{{ auction.place }}</p>
+        </div>
+        <div class="col-7">
+            <h2>Предмет(-ы) искусства</h2>
+            {% if items %}
+            <table class="table table-striped mt-4">
+                <thead>
+                    <tr class="table-success">
+                        <th scope="col">#</th>
+                        <th scope="col">Номер лота</th>
+                        <th scope="col">ФИО продавца</th>
+                        <th scope="col">Стартовая цена</th>
+                        {% if current_user.is_authenticated %}
+                        <td class="text-center">...</td>
+                        {% endif%}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <th scope="row">{{ item.id }}</th>
+                        <td>{{ item.lot_number }}</td>
+                        <td>{{ item.seller.full_name }}</td>
+                        <td>{{ item.starting_price }}</td>
+                        <td class="text-center">
+                            {% if current_user.is_authenticated %}
+                            {% if item.seller_id == current_user.id and item.sale_price == None%}
+                            <a href="{{ url_for('item.sale_item', item_id=item.id)}}" class="btn btn-info">Внести
+                                сведния о продаже</a>
+                            {% endif %}
+                            {% else %}
+                            Вы не являетесь продавцом
+                            {% endif%}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else%}
+            На данном аукционе еще нет предметов исскусства. Будьте первыми!
+            {% endif %}
+            {% if current_user.is_authenticated %}
+            <div class="text-center">
+                <a href="{{ url_for('auction.add', auction_id = auction.id) }}" class="btn btn-warning">Добавить предмет
+                    на аукцион</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

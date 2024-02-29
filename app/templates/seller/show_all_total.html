@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mt-3">Продавцы</h2>
+    <form action="{{ url_for('seller.show_all_total') }}" method="post">
+        <h3>Поиск по дате продажи предметов</h3>
+        <div class="d-flex flex-column"></div>
+        <label for="start_date">Начало</label>
+        <input type="date" name="start_date" id="start_date" value="{{ request.form.get('start_date') or ''}}">
+        <label for="end_date">Конец</label>
+        <input type="date" name="end_date" id="end_date" value="{{ request.form.get('end_date') or ''}}">
+        <button type="submit" class="btn btn-success">Найти продавцов</button>
+    </form>
+</div>
+<div class="container">
+    {% if sellers_dict == 'not_found' %}
+    В заданный промежуток времени нет проданных предметов
+    {% elif sellers_dict %}
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr class="table-success">
+                <th scope="col">ФИО продавца</th>
+                <th scope="col">Суммарный доход</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for seller in sellers_dict %}
+            <tr>
+                <th scope="row">{{ seller.full_name }}</th>
+                <td>{{ sellers_dict[seller] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% else%}
+    Пожалуйста выберите интервал дат для отображения продавцов
+    {% endif %}
+</div>
+</div>
+{% endblock %}

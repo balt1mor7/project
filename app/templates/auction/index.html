@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mt-3">Аукционы</h2>
+    <a href="{{ url_for('auction.show_sort_date') }}" class="btn btn-secondary">Поиск по дате проведения аукциона</a>
+    <a href="{{ url_for('auction.show_total') }}" class="btn btn-secondary">Поиск по уровню доходности</a>
+    
+    <h2 class="mt-3">Предметы</h2>
+    <a href="{{ url_for('item.show_sort_date') }}" class="btn btn-secondary">Предметы, проданные в заданный промежуток времени</a>
+
+    <h2 class="mt-3">Продавцы</h2>
+    <a href="{{ url_for('seller.show_all_total') }}" class="btn btn-secondary">Продавцы и их доход за определенный промежуток времени</a>   
+    
+    <h2 class="mt-3">Покупатели</h2>
+    <a href="{{ url_for('buyer.show_sort_date') }}" class="btn btn-secondary">Отобразить покупателей за определенный промежуток времени</a>   
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mt-3">Аукционы отсортированные по уровню доходности</h2>
+</div>
+<div class="container">
+    {% if data_list %}
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr class="table-success">
+                <th scope="col">#</th>
+                <th scope="col">Название аукциона</th>
+                <th scope="col">Дата проведения</th>
+                <th scope="col">Место проведения</th>
+                <th>
+                    <div class="text-center">Суммарный доход</div>
+                </th>
+                <th>
+                    <div class="text-center">...</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in data_list %}
+            <tr>
+                <th scope="row">{{ data['auction'].id }}</th>
+                <td>{{ data['auction'].description }}</td>
+                <td>{{ data['auction'].date }}</td>
+                <td>{{ data['auction'].place }}</td>
+                <td class="text-center">
+                    {{ data['total'] }}
+                </td>
+                <td>
+                    <div class="text-center">
+                        <a href="{{ url_for('auction.show', auction_id = data['auction'].id) }}"
+                            class="btn btn-primary">Выбрать</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% else%}
+    Пожалуйста выберите интервал дат для отображения доступных аукционов
+    {% endif %}
+</div>
+</div>
+{% endblock %}
