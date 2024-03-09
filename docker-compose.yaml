@@ -1,0 +1,30 @@
+version: "3"
+services:
+  db:
+    image: mysql:8
+    env_file:
+     - .env
+    volumes:
+      - /home/test/mysql1:/var/lib/mysql
+    networks:
+      network:
+        ipv4_address: 123.123.123.2
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      network:
+        ipv4_address: 123.123.123.3
+    ports: 
+      - "80:80"
+    depends_on:
+      - db
+
+networks:
+  network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 123.123.123.0/24
+          gateway: 123.123.123.1
