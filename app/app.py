@@ -5,6 +5,10 @@ from sqlalchemy import MetaData
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
+from prometheus_client import generate_latest
+from prometheus_client import Counter
+from prometheus_client import Summary
+
 app = Flask(__name__)
 application = app
 
@@ -37,7 +41,14 @@ app.register_blueprint(buyer_bp)
 
 init_login_manager(app)
 
+INDEX_TIME = Summary('index_request_processing_seconds', 'DESC: INDEX time spent processing request')
+c = Counter('requests_for_host', 'Number of runs of the process_request method', ['method', 'endpoint'])
 
 @app.route('/')
+@INDEX_TIME.time()
 def index():
     return render_template('index.html')
+
+@app.route('/metrics')
+def metrics():
+    return generate_latest()
